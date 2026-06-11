@@ -1,26 +1,85 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f4efdf;
+  --foreground: #17211f;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-ui);
+  --font-mono: var(--font-data);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
+  background:
+    linear-gradient(90deg, rgba(23, 33, 31, 0.05) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(23, 33, 31, 0.045) 1px, transparent 1px),
+    var(--background);
+  background-size: 22px 22px;
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-ui), ui-sans-serif, system-ui, sans-serif;
+}
+
+.panel {
+  border: 1px solid rgba(23, 33, 31, 0.14);
+  border-radius: 24px;
+  background: rgba(255, 250, 240, 0.92);
+  box-shadow: 0 10px 0 rgba(23, 33, 31, 0.09);
+}
+
+.eyebrow {
+  font-family: var(--font-data), ui-monospace, monospace;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #b93d2f;
+}
+
+.section-title {
+  margin-top: 0.25rem;
+  font-size: clamp(1.8rem, 8vw, 3.4rem);
+  font-weight: 950;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+}
+
+.ranking-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: 1rem;
+  background: #f8edda;
+  padding: 0.75rem;
+}
+
+.rank-chip {
+  display: grid;
+  height: 2rem;
+  width: 2rem;
+  place-items: center;
+  border-radius: 999px;
+  background: #17211f;
+  color: #fff7e8;
+  font-size: 0.8rem;
+  font-weight: 950;
+}
+
+.score-line {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-data), ui-monospace, monospace;
+  font-size: 0.78rem;
+  font-weight: 800;
 }
