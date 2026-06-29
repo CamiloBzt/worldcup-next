@@ -61,16 +61,55 @@ export type GroupMatch = {
   scores: MatchScore[];
 };
 
+export type Round32Prediction = {
+  date: string;
+  home_team: string;
+  away_team: string;
+  status: string;
+  actual_score_90: string;
+  home_win_probability: number;
+  draw_probability: number;
+  away_win_probability: number;
+  top_score: string;
+  top_score_probability: number;
+  favorite_to_advance: string;
+  advance_probability: number;
+  note: string;
+};
+
+export type RecencyScore = {
+  split: string;
+  model: string;
+  selected_by_validation: boolean;
+  test_matches: number;
+  top_1_accuracy: number;
+  top_3_accuracy: number;
+  top_5_accuracy: number;
+  exact_score_log_loss: number;
+  brier_1x2: number;
+};
+
 export type DashboardData = {
   modelScores: ModelScore[];
   tournament: TournamentTeam[];
   groups: GroupTeam[];
   awards: PlayerAward[];
   matches: GroupMatch[];
+  round32: Round32Prediction[];
+  recencyScores: RecencyScore[];
 };
 
 export async function loadDashboardData(): Promise<DashboardData> {
-  const [modelScores, tournament, groups, awards, topScores, oneXTwo] =
+  const [
+    modelScores,
+    tournament,
+    groups,
+    awards,
+    topScores,
+    oneXTwo,
+    round32,
+    recencyScores,
+  ] =
     await Promise.all([
       readCsv("model_comparison_scores.csv"),
       readCsv("worldcup_2026_tournament_monte_carlo.csv"),
@@ -78,6 +117,8 @@ export async function loadDashboardData(): Promise<DashboardData> {
       readCsv("worldcup_2026_player_awards_proxy.csv"),
       readCsv("worldcup_2026_top5_score_predictions.csv"),
       readCsv("worldcup_2026_1x2_probabilities.csv"),
+      readCsv("worldcup_2026_round32_prediction_summary.csv"),
+      readCsv("recency_weighting_scores.csv"),
     ]);
 
   return {
@@ -117,6 +158,32 @@ export async function loadDashboardData(): Promise<DashboardData> {
       expected_matches_proxy: toNumber(row.expected_matches_proxy),
     })),
     matches: buildMatches(topScores, oneXTwo),
+    round32: round32.map((row) => ({
+      date: row.date,
+      home_team: row.home_team,
+      away_team: row.away_team,
+      status: row.status,
+      actual_score_90: row.actual_score_90,
+      home_win_probability: toNumber(row.home_win_probability),
+      draw_probability: toNumber(row.draw_probability),
+      away_win_probability: toNumber(row.away_win_probability),
+      top_score: row.top_score,
+      top_score_probability: toNumber(row.top_score_probability),
+      favorite_to_advance: row.favorite_to_advance,
+      advance_probability: toNumber(row.advance_probability),
+      note: row.note,
+    })),
+    recencyScores: recencyScores.map((row) => ({
+      split: row.split,
+      model: row.model,
+      selected_by_validation: row.selected_by_validation === "True",
+      test_matches: toNumber(row.test_matches),
+      top_1_accuracy: toNumber(row.top_1_accuracy),
+      top_3_accuracy: toNumber(row.top_3_accuracy),
+      top_5_accuracy: toNumber(row.top_5_accuracy),
+      exact_score_log_loss: toNumber(row.exact_score_log_loss),
+      brier_1x2: toNumber(row.brier_1x2),
+    })),
   };
 }
 
