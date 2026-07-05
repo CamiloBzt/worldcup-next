@@ -1,6 +1,6 @@
 import { GroupMatchBrowser } from "@/components/group-match-browser";
 import { loadDashboardData } from "@/lib/data";
-import type { RecencyScore, Round32Prediction } from "@/lib/data";
+import type { KnockoutPrediction, RecencyScore } from "@/lib/data";
 import { percent } from "@/lib/format";
 
 export default async function Home() {
@@ -12,7 +12,7 @@ export default async function Home() {
     .sort((a, b) => b.top_2_probability - a.top_2_probability)
     .slice(0, 6);
   const titleContenders = data.tournament.slice(0, 10);
-  const completedRound32 = data.round32.filter((match) => match.status === "completed").length;
+  const completedRound16 = data.round16.filter((match) => match.status === "completed").length;
   const selectedRecencyScore =
     data.recencyScores.find(
       (score) => score.split === "test_2022_plus" && score.selected_by_validation,
@@ -31,14 +31,14 @@ export default async function Home() {
               WC 2026 lab
             </span>
             <span className="rounded-full bg-[#f7f0df] px-3 py-1 text-xs font-black text-[#17211f]">
-              Round of 32
+              Round of 16
             </span>
           </div>
 
           <div className="mt-9 rounded-[2rem] border border-black/15 bg-[#fffaf0] p-5 shadow-[0_18px_0_rgba(23,33,31,.16)] md:p-8">
             <p className="eyebrow text-[#b93d2f]">Modelo predictivo completo</p>
             <h1 className="mt-3 max-w-4xl text-[3.2rem] font-black leading-[.82] tracking-[-.04em] md:text-8xl">
-              Mundial 2026, ahora en ronda de 32.
+              Mundial 2026, ahora en octavos.
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-[#5d6762] md:text-lg">
               Dashboard React construido sobre el pipeline: marcadores exactos,
@@ -46,7 +46,7 @@ export default async function Home() {
             </p>
 
             <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4">
-              <HeroMetric label="Dieciseisavos" value={`${completedRound32}/16`} sub="con resultado" />
+              <HeroMetric label="Octavos" value={`${completedRound16}/8`} sub="con resultado" />
               <HeroMetric label="Campeon" value={champion.team} sub={percent(champion.champion_probability)} />
               <HeroMetric label="Top-5 score" value={percent(bestModel.top_5_accuracy)} sub="test 2022+" />
               <HeroMetric label="Log loss" value={bestModel.exact_score_log_loss.toFixed(3)} sub="marcador exacto" />
@@ -55,7 +55,12 @@ export default async function Home() {
         </div>
       </section>
 
-      <Round32Section matches={data.round32} />
+      <KnockoutSection
+        badge="90 minutos"
+        eyebrow="Fase eliminatoria"
+        matches={data.round16}
+        title="Predicciones de octavos"
+      />
 
       <section className="px-4 py-7">
         <div className="mx-auto max-w-7xl">
@@ -190,17 +195,27 @@ export default async function Home() {
   );
 }
 
-function Round32Section({ matches }: { matches: Round32Prediction[] }) {
+function KnockoutSection({
+  badge,
+  eyebrow,
+  matches,
+  title,
+}: {
+  badge: string;
+  eyebrow: string;
+  matches: KnockoutPrediction[];
+  title: string;
+}) {
   return (
     <section className="px-4 py-7">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="eyebrow">Fase eliminatoria</p>
-            <h2 className="section-title">Predicciones ronda de 32</h2>
+            <p className="eyebrow">{eyebrow}</p>
+            <h2 className="section-title">{title}</h2>
           </div>
           <span className="w-fit rounded-full bg-[#17211f] px-4 py-2 text-xs font-black uppercase tracking-[.14em] text-[#fff7e8]">
-            90 minutos
+            {badge}
           </span>
         </div>
 
