@@ -95,6 +95,7 @@ export type DashboardData = {
   groups: GroupTeam[];
   awards: PlayerAward[];
   matches: GroupMatch[];
+  semifinals: KnockoutPrediction[];
   quarterfinals: KnockoutPrediction[];
   round16: KnockoutPrediction[];
   round32: KnockoutPrediction[];
@@ -109,6 +110,7 @@ export async function loadDashboardData(): Promise<DashboardData> {
     awards,
     topScores,
     oneXTwo,
+    semifinals,
     quarterfinals,
     round16,
     round32,
@@ -121,6 +123,7 @@ export async function loadDashboardData(): Promise<DashboardData> {
       readCsv("worldcup_2026_player_awards_proxy.csv"),
       readCsv("worldcup_2026_top5_score_predictions.csv"),
       readCsv("worldcup_2026_1x2_probabilities.csv"),
+      readCsv("worldcup_2026_semifinals_prediction_summary.csv"),
       readCsv("worldcup_2026_quarterfinals_prediction_summary.csv"),
       readCsv("worldcup_2026_round16_prediction_summary.csv"),
       readCsv("worldcup_2026_round32_prediction_summary.csv"),
@@ -164,6 +167,7 @@ export async function loadDashboardData(): Promise<DashboardData> {
       expected_matches_proxy: toNumber(row.expected_matches_proxy),
     })),
     matches: buildMatches(topScores, oneXTwo),
+    semifinals: semifinals.map(mapKnockoutPrediction),
     quarterfinals: quarterfinals.map(mapKnockoutPrediction),
     round16: round16.map(mapKnockoutPrediction),
     round32: round32.map(mapKnockoutPrediction),

@@ -12,7 +12,7 @@ export default async function Home() {
     .sort((a, b) => b.top_2_probability - a.top_2_probability)
     .slice(0, 6);
   const titleContenders = data.tournament.slice(0, 10);
-  const completedQuarterfinals = data.quarterfinals.filter(
+  const completedSemifinals = data.semifinals.filter(
     (match) => match.status === "completed",
   ).length;
   const selectedRecencyScore =
@@ -33,14 +33,14 @@ export default async function Home() {
               WC 2026 lab
             </span>
             <span className="rounded-full bg-[#f7f0df] px-3 py-1 text-xs font-black text-[#17211f]">
-              Quarter-finals
+              Semi-finals
             </span>
           </div>
 
           <div className="mt-9 rounded-[2rem] border border-black/15 bg-[#fffaf0] p-5 shadow-[0_18px_0_rgba(23,33,31,.16)] md:p-8">
             <p className="eyebrow text-[#b93d2f]">Modelo predictivo completo</p>
             <h1 className="mt-3 max-w-4xl text-[3.2rem] font-black leading-[.82] tracking-[-.04em] md:text-8xl">
-              Mundial 2026, ahora en cuartos.
+              Mundial 2026, ahora en semifinales.
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-[#5d6762] md:text-lg">
               Dashboard React construido sobre el pipeline: marcadores exactos,
@@ -48,7 +48,7 @@ export default async function Home() {
             </p>
 
             <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4">
-              <HeroMetric label="Cuartos" value={`${completedQuarterfinals}/4`} sub="con resultado" />
+              <HeroMetric label="Semis" value={`${completedSemifinals}/2`} sub="con resultado" />
               <HeroMetric label="Campeon" value={champion.team} sub={percent(champion.champion_probability)} />
               <HeroMetric label="Top-5 score" value={percent(bestModel.top_5_accuracy)} sub="test 2022+" />
               <HeroMetric label="Log loss" value={bestModel.exact_score_log_loss.toFixed(3)} sub="marcador exacto" />
@@ -60,8 +60,8 @@ export default async function Home() {
       <KnockoutSection
         badge="90 minutos"
         eyebrow="Fase eliminatoria"
-        matches={data.quarterfinals}
-        title="Predicciones de cuartos"
+        matches={data.semifinals}
+        title="Predicciones de semifinales"
       />
 
       <section className="px-4 py-7">
