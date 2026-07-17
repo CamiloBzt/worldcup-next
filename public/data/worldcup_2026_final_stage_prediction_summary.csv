@@ -1,0 +1,3 @@
+date,home_team,away_team,status,actual_score_90,home_win_probability,draw_probability,away_win_probability,top_score,top_score_probability,favorite_to_advance,advance_probability,note
+2026-07-18,France,England,scheduled,,0.32272813195552247,0.2682248513542867,0.4090313432395698,1-1,0.1273961449537349,England,0.5589608965404379,modelo
+2026-07-19,Spain,Argentina,scheduled,,0.41418815417276633,0.2529928455107211,0.33278540285115515,1-1,0.11955535120011525,Spain,0.5544697460921516,modelo
